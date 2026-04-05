@@ -7,6 +7,8 @@ import { createApp } from './app';
 
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 const TICK_INTERVAL_MS = 5000;
+// Set ALLOWED_ORIGIN to your Netlify URL, e.g. https://your-app.netlify.app
+const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN;
 
 // ── Bootstrap ────────────────────────────────────────────────────────────────
 
@@ -21,14 +23,14 @@ for (const service of seedServices) {
 }
 
 // Wire up Express app
-const app = createApp(registry, logManager, healthEngine);
+const app = createApp(registry, logManager, healthEngine, ALLOWED_ORIGIN);
 
 // Start simulation loop
 scheduler.start(TICK_INTERVAL_MS);
 
-// Start HTTP server
-const server = app.listen(PORT, () => {
-  console.log(`[server] System Health Simulation running on http://localhost:${PORT}`);
+// Start HTTP server — bind to 0.0.0.0 so other devices on the network can reach it
+const server = app.listen(PORT, '0.0.0.0', () => {
+  console.log(`[server] System Health Simulation running on http://0.0.0.0:${PORT}`);
   console.log(`[server] Scheduler ticking every ${TICK_INTERVAL_MS / 1000}s`);
 });
 
