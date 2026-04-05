@@ -1,0 +1,88 @@
+import { Service, ServiceStatus, ServiceType } from '../types';
+
+export const seedServices: Service[] = [
+  // ── Infrastructure ────────────────────────────────────────────────────────
+  {
+    name: 'Email',
+    type: ServiceType.Infrastructure,
+    status: ServiceStatus.Healthy,
+    dependencies: [],
+    lastChecked: new Date().toISOString(),
+    errorCount: 0,
+    description: '',
+  },
+  {
+    name: 'MySQL',
+    type: ServiceType.Infrastructure,
+    status: ServiceStatus.Healthy,
+    dependencies: [],
+    lastChecked: new Date().toISOString(),
+    errorCount: 0,
+    description: '',
+  },
+  {
+    name: 'PostgreSQL',
+    type: ServiceType.Infrastructure,
+    status: ServiceStatus.Healthy,
+    dependencies: [],
+    lastChecked: new Date().toISOString(),
+    errorCount: 0,
+    description: '',
+  },
+  {
+    name: 'Oracle',
+    type: ServiceType.Infrastructure,
+    status: ServiceStatus.Healthy,
+    dependencies: [],
+    lastChecked: new Date().toISOString(),
+    errorCount: 0,
+    description: '',
+  },
+
+  // ── Web Applications ──────────────────────────────────────────────────────
+  {
+    name: 'WebApp1',
+    type: ServiceType.WebApp,
+    status: ServiceStatus.Healthy,
+    dependencies: ['MySQL', 'Email'],
+    lastChecked: new Date().toISOString(),
+    errorCount: 0,
+    description: '',
+  },
+  {
+    name: 'WebApp2',
+    type: ServiceType.WebApp,
+    status: ServiceStatus.Healthy,
+    dependencies: ['MySQL', 'PostgreSQL'],
+    lastChecked: new Date().toISOString(),
+    errorCount: 0,
+    description: '',
+  },
+  {
+    name: 'WebApp3',
+    type: ServiceType.WebApp,
+    status: ServiceStatus.Healthy,
+    dependencies: ['Email', 'Oracle'],
+    lastChecked: new Date().toISOString(),
+    errorCount: 0,
+    description: '',
+  },
+  {
+    name: 'WebApp4',
+    type: ServiceType.WebApp,
+    status: ServiceStatus.Healthy,
+    dependencies: ['PostgreSQL'],
+    lastChecked: new Date().toISOString(),
+    errorCount: 0,
+    description: '',
+  },
+  {
+    name: 'WebApp5',
+    type: ServiceType.WebApp,
+    status: ServiceStatus.Healthy,
+    dependencies: ['Oracle', 'MySQL'],
+    lastChecked: new Date().toISOString(),
+    errorCount: 0,
+    description: '',
+  },
+];
