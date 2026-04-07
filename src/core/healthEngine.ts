@@ -1,6 +1,7 @@
 import { Service, ServiceStatus, ServiceType } from '../types';
 import { ServiceRegistry } from './serviceRegistry';
 import { LogManager } from './logManager';
+import logger from './logger';
 
 export class HealthEngine {
   constructor(
@@ -69,14 +70,17 @@ export class HealthEngine {
       updates.errorCount = service.errorCount + 1;
       updates.description = `Service ${name} is unhealthy`;
       this.logManager.addLog(name, 'ERROR', `Infrastructure ${name} transitioned to Unhealthy`);
+      logger.error({ service: name, from: service.status, to: newStatus }, `[infra] ${name}: ${service.status} → ${newStatus}`);
     } else if (newStatus === ServiceStatus.Degraded) {
       updates.errorCount = service.errorCount + 1;
       updates.description = `Service ${name} is degraded`;
       this.logManager.addLog(name, 'WARN', `Infrastructure ${name} transitioned to Degraded`);
+      logger.warn({ service: name, from: service.status, to: newStatus }, `[infra] ${name}: ${service.status} → ${newStatus}`);
     } else {
       updates.errorCount = 0;
       updates.description = '';
       this.logManager.addLog(name, 'INFO', `Infrastructure ${name} recovered to Healthy`);
+      logger.info({ service: name, from: service.status, to: newStatus }, `[infra] ${name}: ${service.status} → ${newStatus}`);
     }
 
     this.registry.update(name, updates);
@@ -116,6 +120,7 @@ export class HealthEngine {
         'ERROR',
         `Service ${service.name} transitioned to Unhealthy`,
       );
+      logger.error({ service: service.name, from: service.status, to: newStatus }, `[webapp] ${service.name}: ${service.status} → ${newStatus}`);
     } else if (newStatus === ServiceStatus.Degraded) {
       updates.errorCount = service.errorCount + 1;
       updates.description = this.buildFailureDescription(service, newStatus);
@@ -124,10 +129,12 @@ export class HealthEngine {
         'WARN',
         `Service ${service.name} transitioned to Degraded`,
       );
+      logger.warn({ service: service.name, from: service.status, to: newStatus }, `[webapp] ${service.name}: ${service.status} → ${newStatus}`);
     } else {
       updates.errorCount = 0;
       updates.description = '';
       this.logManager.addLog(service.name, 'INFO', `Service ${service.name} recovered to Healthy`);
+      logger.info({ service: service.name, from: service.status, to: newStatus }, `[webapp] ${service.name}: ${service.status} → ${newStatus}`);
     }
 
     this.registry.update(service.name, updates);
